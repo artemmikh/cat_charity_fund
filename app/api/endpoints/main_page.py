@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Response
 
-router = APIRouter()
+router = APIRouter(tags=['dev'])
 
 
 @router.get('/')
-def get_all_meeting_rooms():
+def start_page_redirect():
     """Выводит ссылку на документацию на главную страницу"""
     html_content = '''
     <html>
     <head>
         <style>
             body {
-                background-color: black;
+                background-color: gray;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -23,7 +23,7 @@ def get_all_meeting_rooms():
         </style>
     </head>
     <body>
-        <A HREF="HTTP://127.0.0.1:8000/DOCS">DOCUMENTATION</A>
+        <A HREF="HTTP://127.0.0.1:8000/docs">DOCUMENTATION</A>
     </body>
     </html>
     '''
