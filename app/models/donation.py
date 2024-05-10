@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, Text
 
-from base import BaseModel
+from app.models.base import BaseModel
 
 
 class Donation(BaseModel):
