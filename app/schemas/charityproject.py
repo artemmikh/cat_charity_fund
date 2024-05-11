@@ -1,30 +1,25 @@
 from typing import Optional
 from datetime import datetime
 
-from pydantic import BaseModel, Field, validator, NonNegativeInt, StrictBool
+from pydantic import Field, NonNegativeInt, StrictBool
+
+from app.schemas.base import SchemasBaseModel
 
 
-class CharityProjectBase(BaseModel):
-    # TODO запилить SchemasBaseModel
-    name: str = Field(..., min_length=1, max_length=100)
-    description: str = Field(..., min_length=1)
-    full_amount: NonNegativeInt = Field(..., )
-    invested_amount: NonNegativeInt = Field(..., example=0, )
-
-
-class CharityProjectCreate(CharityProjectBase):
+class CharityProjectCreate(SchemasBaseModel):
     pass
 
 
-class CharityProjectUpdate(CharityProjectBase):
+class CharityProjectUpdate(SchemasBaseModel):
     pass
 
 
-class CharityProjectDB(CharityProjectBase):
+class CharityProjectDB(CharityProjectCreate):
     id: int
-    create_date: datetime
-    close_date: datetime
+    invested_amount: NonNegativeInt = Field(..., example=0, )
     fully_invested: StrictBool = Field(..., example=False)
+    create_date: datetime
+    close_date: Optional[datetime]
 
     class Config:
         orm_mode = True
