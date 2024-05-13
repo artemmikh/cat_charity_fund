@@ -4,13 +4,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
 from app.core.user import current_superuser
-from app.schemas.base import SchemasBaseModel
 from app.schemas.charityproject import (
     CharityProjectDB,
     CharityProjectCreate,
     CharityProjectUpdate)
 from app.crud.charityproject import charityproject_crud
-from app.api.validators import check_name_duplicate, check_charityproject_exists
+from app.api.validators import (
+    check_name_duplicate,
+    check_charityproject_exists,
+    check_full_amount,
+    check_close_project)
 
 router = APIRouter()
 
@@ -49,12 +52,11 @@ async def partially_update_charityproject(
         session: AsyncSession = Depends(get_async_session), ):
     project = await check_charityproject_exists(
         charityproject_id, session)
+    await check_close_project(project, session)
     if obj_in.name is not None:
         await check_name_duplicate(obj_in.name, session)
-    # TODO требуемая сумма не меньше уже внесённой
-    # TODO Никто не может менять через API размер внесённых средств
-    # TODO Никто не может модифицировать закрытые проекты
-    # TODO Никто не может изменять даты создания и закрытия проектов
+    if obj_in.full_amount is not None:
+        await check_full_amount(obj_in.full_amount, charityproject_id, session)
     project = await charityproject_crud.update(
         project, obj_in, session)
     return project
@@ -72,6 +74,6 @@ async def remove_charityproject(
     project = await check_charityproject_exists(
         charityproject_id, session
     )
-    # TODO Никто не может удалять закрытые проекты
     project = await charityproject_crud.remove(project, session)
+    await check_close_project(project, session)
     return project
