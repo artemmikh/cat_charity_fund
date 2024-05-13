@@ -7,7 +7,8 @@ from app.schemas.base import SchemasBaseModel
 
 
 class CharityProjectCreate(SchemasBaseModel):
-    pass
+    name: str = Field(..., min_length=1, max_length=100)
+    description: str = Field(..., min_length=1)
 
 
 class CharityProjectUpdate(SchemasBaseModel):
