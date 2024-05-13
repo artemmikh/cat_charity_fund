@@ -22,3 +22,16 @@ class DonationDB(DonationCreate):
 
     class Config:
         orm_mode = True
+
+
+class DonationDBSuperuser(DonationCreate):
+    id: int
+    full_amount: int
+    create_date: datetime
+    close_date: Optional[datetime]
+    user_id: int
+    invested_amount: NonNegativeInt
+    fully_invested: StrictBool
+
+    class Config:
+        orm_mode = True

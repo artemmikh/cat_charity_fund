@@ -17,11 +17,11 @@ router = APIRouter()
 
 @router.post('/',
              response_model=CharityProjectDB,
-             response_model_exclude_none=True)
+             response_model_exclude_none=True,
+             dependencies=[Depends(current_superuser)]
+             )
 async def create_charity_project(
         project: CharityProjectCreate,
-        # TODO насыпать прав суперюзеру
-        # dependencies=[Depends(current_superuser)],
         session: AsyncSession = Depends(get_async_session)):
     await check_name_duplicate(project.name, session)
     new_room = await charityproject_crud.create(project, session)
@@ -41,8 +41,7 @@ async def get_charity_projects(
     '/{charityproject_id}',
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
-    # TODO насыпать прав суперюзеру
-    # dependencies=[Depends(current_superuser)],
+    dependencies=[Depends(current_superuser)],
 )
 async def partially_update_charityproject(
         charityproject_id: int,
@@ -65,8 +64,7 @@ async def partially_update_charityproject(
     '/{charityproject_id}',
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
-    # TODO насыпать прав суперюзеру
-    # dependencies=[Depends(current_superuser)],
+    dependencies=[Depends(current_superuser)],
 )
 async def remove_charityproject(
         charityproject_id: int,
