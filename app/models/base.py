@@ -13,5 +13,9 @@ class BaseModel(Base):
     # TODO не работает default если не передавать поле в запросе
     invested_amount = Column(Integer, nullable=False, default=0)
     fully_invested = Column(Boolean, nullable=False, default=False)
+    # TODO Убедитесь, что в поле create_date у вновь создаваемых объектов
+    #  записываются разные значения даты и времени.
+    #  в параметр default нужно передавать не результат вызова функции,
+    #  а саму функцию.
     create_date = Column(DateTime, index=True, default=datetime.utcnow)
     close_date = Column(DateTime, index=True)

@@ -10,10 +10,6 @@ class DonationCreate(SchemasBaseModel):
     comment: str = Field(..., example="Donation")
 
 
-class DonationUpdate(SchemasBaseModel):
-    pass
-
-
 class DonationDB(DonationCreate):
     id: int
     full_amount: int
