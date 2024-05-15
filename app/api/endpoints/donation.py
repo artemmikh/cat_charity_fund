@@ -11,7 +11,7 @@ from app.schemas.donation import (
 from app.crud.donation import donation_crud
 from app.core.user import current_user
 from app.models import User
-from app.services.investment import investing
+from app.services.investment import investing_new_donation
 
 router = APIRouter()
 
@@ -25,7 +25,7 @@ async def create_donation(
         session: AsyncSession = Depends(get_async_session),
         user: User = Depends(current_user)):
     new_donation = await donation_crud.create(donation, session, user)
-    invest_donation = await investing(new_donation, session)
+    invest_donation = await investing_new_donation(new_donation, session)
     await session.commit()
     await session.refresh(invest_donation)
     return new_donation

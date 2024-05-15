@@ -4,7 +4,7 @@ from sqlalchemy import select, asc
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.base import CRUDBase
-from app.models.charityproject import CharityProject
+from app.models import CharityProject, Donation
 
 
 class CRUDCharityProject(CRUDBase):
@@ -31,6 +31,16 @@ class CRUDCharityProject(CRUDBase):
             .order_by(asc(CharityProject.create_date))
             .limit(1))
         return oldest_open_project.scalars().first()
+
+    async def get_oldest_open_donation(
+            self, session: AsyncSession,
+    ) -> Optional[Donation]:
+        oldest_open_donation = await session.execute(
+            select(Donation).filter(
+                Donation.fully_invested == False)
+            .order_by(asc(Donation.create_date))
+            .limit(1))
+        return oldest_open_donation.scalars().first()
 
 
 charityproject_crud = CRUDCharityProject(CharityProject)

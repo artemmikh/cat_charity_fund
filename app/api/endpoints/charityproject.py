@@ -14,6 +14,7 @@ from app.api.validators import (
     check_charityproject_exists,
     check_full_amount,
     check_close_project)
+from app.services.investment import investing_to_new_project
 
 router = APIRouter()
 
@@ -28,6 +29,9 @@ async def create_charity_project(
         session: AsyncSession = Depends(get_async_session)):
     await check_name_duplicate(project.name, session)
     new_room = await charityproject_crud.create(project, session)
+    invest_project = await investing_to_new_project(new_room, session)
+    await session.commit()
+    await session.refresh(invest_project)
     return new_room
 
 
