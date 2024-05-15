@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import select, desc
+from sqlalchemy import select, asc
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.base import CRUDBase
@@ -22,14 +22,15 @@ class CRUDCharityProject(CRUDBase):
         db_room_id = db_project_id.scalars().first()
         return db_room_id
 
-    async def get_newest_open_project(
-            self, session: AsyncSession, ) -> Optional[CharityProject]:
-        newest_open_project = await session.execute(
+    async def get_oldest_open_project(
+            self, session: AsyncSession,
+    ) -> Optional[CharityProject]:
+        oldest_open_project = await session.execute(
             select(CharityProject).filter(
                 CharityProject.fully_invested == False)
-            .order_by(desc(CharityProject.create_date))
+            .order_by(asc(CharityProject.create_date))
             .limit(1))
-        return newest_open_project.scalars().first()
+        return oldest_open_project.scalars().first()
 
 
 charityproject_crud = CRUDCharityProject(CharityProject)
