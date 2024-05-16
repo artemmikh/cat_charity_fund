@@ -11,7 +11,7 @@ main_router.include_router(main_page_router)
 main_router.include_router(user_router)
 main_router.include_router(
     charityproject_router,
-    prefix='/charity-project',
+    prefix='/charity_project',
     tags=['Charity Project'])
 main_router.include_router(
     donation_router,

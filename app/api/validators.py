@@ -17,7 +17,7 @@ async def check_name_duplicate(
                                                                session)
     if project_id is not None:
         raise HTTPException(
-            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
+            status_code=HTTPStatus.BAD_REQUEST,
             detail='Проект с таким именем уже существует!',
         )
 
@@ -46,12 +46,27 @@ async def check_full_amount(
         )
 
 
+# TODO Объединить с валидатором ниже
 async def check_close_project(
-        project,
-        session: AsyncSession,
+        project, session: AsyncSession
 ):
     if project.fully_invested is True:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
             detail='Нельзя редактировать или удалять закрытый проект!'
+        )
+    if project.invested_amount > 0:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail='Нельзя удалять проект в который внесены средства!'
+        )
+
+
+async def check_project_before_edit(
+        project, session: AsyncSession
+):
+    if project.invested_amount is not None:
+        raise HTTPException(
+            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
+            detail='Нельзя изменять сумму инвестиций'
         )

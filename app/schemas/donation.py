@@ -1,12 +1,20 @@
 from typing import Optional
 from datetime import datetime
 
-from pydantic import Field, NonNegativeInt, StrictBool, BaseModel
+from pydantic import Field, NonNegativeInt, StrictBool, BaseModel, validator
 
 
 class DonationCreate(BaseModel):
     full_amount: NonNegativeInt = Field(..., example=10)
-    comment: Optional[str] = Field(..., example="For cats!!!")
+    comment: Optional[str]
+    full_amount: Optional[NonNegativeInt] = Field(..., )
+
+    @validator('full_amount')
+    def check_full_amount(cls, value):
+        if value is not None and (not isinstance(value, int) or value <= 0):
+            raise ValueError(
+                'сумма пожертвования должна быть целочисленной и больше 0')
+        return value
 
 
 class DonationDB(DonationCreate):
