@@ -10,7 +10,6 @@ from app.core.db import Base
 class BaseModel(Base):
     __abstract__ = True
     full_amount = Column(Integer, nullable=False)
-    # TODO не работает default если не передавать поле в запросе
     invested_amount = Column(Integer, nullable=False, default=0)
     fully_invested = Column(Boolean, nullable=False, default=False)
     # TODO Убедитесь, что в поле create_date у вновь создаваемых объектов

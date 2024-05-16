@@ -1,13 +1,12 @@
 from typing import Optional
 from datetime import datetime
 
-from pydantic import Field, NonNegativeInt, StrictBool
-
-from app.schemas.base import SchemasBaseModel
+from pydantic import Field, NonNegativeInt, StrictBool, BaseModel
 
 
-class DonationCreate(SchemasBaseModel):
-    comment: str = Field(..., example="Donation")
+class DonationCreate(BaseModel):
+    full_amount: NonNegativeInt = Field(..., example=10)
+    comment: Optional[str] = Field(..., example="For cats!!!")
 
 
 class DonationDB(DonationCreate):
