@@ -46,7 +46,7 @@ async def check_full_amount(
         )
 
 
-# TODO Объединить с валидатором ниже
+# TODO Объединить с валидатором ниже Или поменять название
 async def check_close_project(
         project, session: AsyncSession
 ):
@@ -55,6 +55,9 @@ async def check_close_project(
             status_code=HTTPStatus.BAD_REQUEST,
             detail='Нельзя редактировать или удалять закрытый проект!'
         )
+
+
+def check_project_invested_amount(project):
     if project.invested_amount > 0:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
@@ -62,11 +65,29 @@ async def check_close_project(
         )
 
 
+# TODO Убрать асинхронность
 async def check_project_before_edit(
         project, session: AsyncSession
 ):
     if project.invested_amount is not None:
         raise HTTPException(
             status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
-            detail='Нельзя изменять сумму инвестиций'
+            detail='Нельзя изменять сумму инвестиций!'
+        )
+    if project.create_date is not None:
+        raise HTTPException(
+            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
+            detail='Нельзя изменять дату создания!'
+        )
+
+    if project.close_date is not None:
+        raise HTTPException(
+            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
+            detail='Нельзя изменять дату закрытия!'
+        )
+
+    if project.fully_invested is not None:
+        raise HTTPException(
+            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
+            detail='Нельзя изменять сумму инвестирования!'
         )

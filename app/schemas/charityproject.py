@@ -10,7 +10,12 @@ from fastapi import HTTPException
 class CharityProjectBase(BaseModel):
     name: Optional[str] = Field(..., min_length=1, max_length=100)
     description: Optional[str] = Field(..., min_length=1)
-    full_amount: Optional[NonNegativeInt] = Field(..., )
+    full_amount: NonNegativeInt
+
+
+class CharityProjectCreate(CharityProjectBase):
+    name: str = Field(..., min_length=1, max_length=100)
+    description: str = Field(..., min_length=1)
 
     @validator('full_amount')
     def check_full_amount(cls, value):
@@ -18,12 +23,6 @@ class CharityProjectBase(BaseModel):
             raise ValueError(
                 'сумма пожертвования должна быть целочисленной и больше 0')
         return value
-
-
-class CharityProjectCreate(CharityProjectBase):
-    name: str = Field(..., min_length=1, max_length=100)
-    description: str = Field(..., min_length=1)
-    full_amount: Optional[NonNegativeInt]
 
 
 class CharityProjectUpdate(CharityProjectBase):
@@ -35,16 +34,23 @@ class CharityProjectUpdate(CharityProjectBase):
     close_date: Optional[datetime]
     fully_invested: Optional[StrictBool]
 
-    # TODO Сделать с этим что-нибудь
-    # @validator('invested_amount')
-    # def check_from_reserve_before_to_reserve(cls, value):
-    #     invested_amount = value.get('invested_amount')
-    #     print(invested_amount)
-    #     if invested_amount is not None:
-    #         raise HTTPException(
-    #             status_code=HTTPStatus.BAD_REQUEST,
-    #             detail='Никто не может менять размер внесённых средств')
-    #     return value
+    @validator('name', allow_reuse=True)
+    def name_cannot_be_null(cls, value):
+        if value is None:
+            raise ValueError('Имя может быть пустым')
+        return value
+
+    @validator('description', allow_reuse=True)
+    def description_cannot_be_null(cls, value):
+        if value is None:
+            raise ValueError('Описание не может быть пустым')
+        return value
+
+    @validator('full_amount', allow_reuse=True)
+    def full_amount_cannot_be_null(cls, value):
+        if value is None:
+            raise ValueError('Сумма не может быть пустой')
+        return value
 
 
 class CharityProjectDB(CharityProjectBase):

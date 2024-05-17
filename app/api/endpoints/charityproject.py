@@ -13,7 +13,8 @@ from app.api.validators import (
     check_name_duplicate,
     check_charityproject_exists,
     check_full_amount,
-    check_close_project, check_project_before_edit)
+    check_close_project, check_project_before_edit,
+    check_project_invested_amount)
 from app.services.investment import investing_to_new_project
 
 router = APIRouter()
@@ -57,7 +58,7 @@ async def partially_update_charityproject(
     project = await check_charityproject_exists(
         charityproject_id, session)
     await check_project_before_edit(obj_in, session)
-    # TODO убрать?
+    # TODO убрать Если будут изменения в валидаторах
     await check_close_project(project, session)
     if obj_in.name is not None:
         await check_name_duplicate(obj_in.name, session)
@@ -82,4 +83,5 @@ async def remove_charityproject(
     )
     project = await charityproject_crud.remove(project, session)
     await check_close_project(project, session)
+    check_project_invested_amount(project)
     return project
