@@ -69,6 +69,7 @@ def check_project_invested_amount(project):
 async def check_project_before_edit(
         project, session: AsyncSession
 ):
+    print(project)
     if project.invested_amount is not None:
         raise HTTPException(
             status_code=HTTPStatus.UNPROCESSABLE_ENTITY,

@@ -4,6 +4,7 @@ from http import HTTPStatus
 
 from pydantic import (Field, NonNegativeInt, StrictBool, BaseModel,
                       root_validator, validator)
+# TODO почистить все импорты
 from fastapi import HTTPException
 
 
@@ -36,13 +37,13 @@ class CharityProjectUpdate(CharityProjectBase):
 
     @validator('name', allow_reuse=True)
     def name_cannot_be_null(cls, value):
-        if value is None:
+        if value is None or value == '':
             raise ValueError('Имя может быть пустым')
         return value
 
     @validator('description', allow_reuse=True)
     def description_cannot_be_null(cls, value):
-        if value is None:
+        if value is None or value == '':
             raise ValueError('Описание не может быть пустым')
         return value
 
