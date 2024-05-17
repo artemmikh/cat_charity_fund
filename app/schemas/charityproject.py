@@ -1,11 +1,7 @@
-from typing import Optional
 from datetime import datetime
-from http import HTTPStatus
+from typing import Optional
 
-from pydantic import (Field, NonNegativeInt, StrictBool, BaseModel,
-                      root_validator, validator)
-# TODO почистить все импорты
-from fastapi import HTTPException
+from pydantic import (Field, NonNegativeInt, StrictBool, BaseModel, validator)
 
 
 class CharityProjectBase(BaseModel):

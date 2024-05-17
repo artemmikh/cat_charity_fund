@@ -2,9 +2,9 @@ from datetime import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.crud.charityproject import charityproject_crud
 from app.schemas.charityproject import CharityProjectDB
 from app.schemas.donation import DonationDB
-from app.crud.charityproject import charityproject_crud
 
 
 async def investing_new_donation(

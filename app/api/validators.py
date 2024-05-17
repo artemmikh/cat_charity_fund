@@ -1,4 +1,3 @@
-from datetime import datetime
 from http import HTTPStatus
 
 from fastapi import HTTPException
@@ -6,7 +5,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.charityproject import charityproject_crud
 from app.models import CharityProject
-from app.schemas.charityproject import CharityProjectUpdate
 
 
 async def check_name_duplicate(
@@ -46,10 +44,7 @@ async def check_full_amount(
         )
 
 
-# TODO Объединить с валидатором ниже Или поменять название
-async def check_close_project(
-        project, session: AsyncSession
-):
+def check_close_project(project):
     if project.fully_invested is True:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
@@ -65,11 +60,7 @@ def check_project_invested_amount(project):
         )
 
 
-# TODO Убрать асинхронность
-async def check_project_before_edit(
-        project, session: AsyncSession
-):
-    print(project)
+def check_project_before_edit(project):
     if project.invested_amount is not None:
         raise HTTPException(
             status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
