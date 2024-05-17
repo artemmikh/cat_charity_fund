@@ -10,7 +10,7 @@ from fastapi import HTTPException
 
 class CharityProjectBase(BaseModel):
     name: Optional[str] = Field(..., min_length=1, max_length=100)
-    description: Optional[str] = Field(..., min_length=1)
+    description: Optional[str]
     full_amount: NonNegativeInt
 
 

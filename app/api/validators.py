@@ -39,7 +39,7 @@ async def check_full_amount(
         session: AsyncSession,
 ) -> None:
     charityproject = await charityproject_crud.get(charityproject_id, session)
-    if full_amount <= charityproject.invested_amount:
+    if full_amount < charityproject.invested_amount:
         raise HTTPException(
             status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
             detail='Требуемая сумма не может быть меньше уже внесённой!'
