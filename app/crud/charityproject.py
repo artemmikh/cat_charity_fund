@@ -27,7 +27,7 @@ class CRUDCharityProject(CRUDBase):
     ) -> Optional[CharityProject]:
         oldest_open_project = await session.execute(
             select(CharityProject).filter(
-                CharityProject.fully_invested == False)
+                CharityProject.fully_invested.is_(False))
             .order_by(asc(CharityProject.create_date))
             .limit(1))
         return oldest_open_project.scalars().first()
@@ -37,7 +37,7 @@ class CRUDCharityProject(CRUDBase):
     ) -> Optional[Donation]:
         oldest_open_donation = await session.execute(
             select(Donation).filter(
-                Donation.fully_invested == False)
+                Donation.fully_invested.is_(False))
             .order_by(asc(Donation.create_date))
             .limit(1))
         return oldest_open_donation.scalars().first()
