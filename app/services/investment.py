@@ -50,11 +50,14 @@ async def investing_to_new_project(
         session: AsyncSession, ):
     need_donation = project.full_amount
 
-    while need_donation > 0:
+    if need_donation <= 0:
+        await session.commit()
+        return project
 
+    while True:
         donation = await charityproject_crud.get_oldest_open_donation(session)
         if donation is None:
-            return project
+            break
 
         free_donation = donation.full_amount - donation.invested_amount
 
@@ -72,14 +75,14 @@ async def investing_to_new_project(
             donation.close_date = datetime.now()
             project.fully_invested = True
             project.close_date = datetime.now()
-            need_donation = 0
+            break
 
         elif free_donation > need_donation:
             project.invested_amount = project.full_amount
             donation.invested_amount += need_donation
             project.fully_invested = True
             project.close_date = datetime.now()
-            need_donation = 0
+            break
 
     await session.commit()
     return project

@@ -40,8 +40,7 @@ async def create_charity_project(
             response_model_exclude_none=True)
 async def get_charity_projects(
         session: AsyncSession = Depends(get_async_session)):
-    all_projects = await charityproject_crud.get_multi(session)
-    return all_projects
+    return await charityproject_crud.get_multi(session)
 
 
 @router.patch(
@@ -62,9 +61,7 @@ async def partially_update_charityproject(
         await check_name_duplicate(obj_in.name, session)
     if obj_in.full_amount is not None:
         await check_full_amount(obj_in.full_amount, charityproject_id, session)
-    project = await charityproject_crud.update(
-        project, obj_in, session)
-    return project
+    return await charityproject_crud.update(project, obj_in, session)
 
 
 @router.delete(

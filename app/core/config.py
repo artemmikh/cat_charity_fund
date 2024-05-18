@@ -6,7 +6,7 @@ from pydantic import BaseSettings, EmailStr
 class Settings(BaseSettings):
     app_title: str = 'QRKot'
     description: str = 'Кошачий благотворительный фонд'
-    database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
+    database_url: str = 'sqlite+aiosqlite:///./QRkot.db'
     secret: str = 'SECRET'
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None

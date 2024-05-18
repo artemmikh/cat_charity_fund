@@ -19,8 +19,7 @@ class CRUDCharityProject(CRUDBase):
                 CharityProject.name == project_name
             )
         )
-        db_room_id = db_project_id.scalars().first()
-        return db_room_id
+        return db_project_id.scalars().first()
 
     async def get_oldest_open_project(
             self, session: AsyncSession,
